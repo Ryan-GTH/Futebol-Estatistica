@@ -1,0 +1,74 @@
+Grupo: Ryan C, Rayanderson, Angelica e Beatriz
+
+
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+dados = pd.read_csv(
+    "jogadores_reais.csv",
+    sep=";",
+    encoding="cp1252"
+)
+
+dados = dados.sort_values(
+    by="Goals",
+    ascending=False
+).head(30)
+
+jogadores = dados[
+    ["Player", "Squad", "Comp", "Age", "MP", "Goals", "Assists"]
+].copy()
+
+jogadores = jogadores.fillna(0)
+
+print("DESEMPENHO DOS JOGADORES ")
+print(jogadores.head(10).to_string(index=False))
+
+media_gols = np.mean(jogadores["Goals"])
+media_assistencias = np.mean(jogadores["Assists"])
+
+print(" MÉDIAS ")
+print(f"Média de gols: {media_gols:.2f}")
+print(f"Média de assistências: {media_assistencias:.2f}")
+
+artilheiro = jogadores.loc[jogadores["Goals"].idxmax()]
+
+print(" ARTILHEIRO ")
+print("Jogador:", artilheiro["Player"])
+print("Clube:", artilheiro["Squad"])
+print("Gols:", artilheiro["Goals"])
+
+ranking = jogadores.sort_values(
+    by="Goals",
+    ascending=False
+).head(10)
+
+print("\n=== TOP 10 ARTILHEIROS ===")
+print(ranking[["Player", "Squad", "Goals"]].to_string(index=False))
+
+plt.figure(figsize=(12, 6))
+plt.bar(ranking["Player"], ranking["Goals"])
+plt.title("Top 10 jogadores por gols")
+plt.xlabel("Jogadores")
+plt.ylabel("Gols")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
+
+top_assistencias = jogadores.sort_values(
+    by="Assists",
+    ascending=False
+).head(10)
+
+plt.figure(figsize=(12, 6))
+plt.bar(top_assistencias["Player"], top_assistencias["Assists"])
+plt.title("Top 10 jogadores por assistências")
+plt.xlabel("Jogadores")
+plt.ylabel("Assistências")
+plt.xticks(rotation=45, ha="right")
+plt.tight_layout()
+plt.show()
